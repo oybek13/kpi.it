@@ -1,6 +1,8 @@
 package davr.team.security;
 
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,13 +21,16 @@ import java.io.IOException;
  * Date : 5.11.2022
  * Project Name : kpi.it
  */
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    // inject required dependencies
-    private final JwtTokenProvider tokenProvider;
 
-    private final CustomUserDetailsService customUserDetailsService;
+    // inject required dependencies
+    @Autowired
+    private JwtTokenProvider tokenProvider;
+
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
 
 
     @Override

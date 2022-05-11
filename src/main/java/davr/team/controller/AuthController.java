@@ -3,6 +3,9 @@ package davr.team.controller;
 import davr.team.dto.LoginDto;
 import davr.team.dto.SignUpDto;
 import davr.team.dto.response.ApiResponse;
+import davr.team.dto.response.JwtAuthResponse;
+import davr.team.security.JwtTokenProvider;
+import davr.team.service.LoginService;
 import davr.team.service.SignUpService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,17 +29,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
-
     private final SignUpService signUpService;
+    private final LoginService loginService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> authenticate(@RequestBody LoginDto loginDto){
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginDto.getUsernameOrEmail(), loginDto.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        return new ResponseEntity<>("The user successfully signed-in!", HttpStatus.OK);
+    public ResponseEntity<JwtAuthResponse> authenticate(@RequestBody LoginDto loginDto){
+        return ResponseEntity.ok(loginService.login(loginDto));
     }
 
     @PostMapping("/signup")
