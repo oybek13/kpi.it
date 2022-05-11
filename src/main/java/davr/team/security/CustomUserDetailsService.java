@@ -2,7 +2,7 @@ package davr.team.security;
 
 import davr.team.entity.Role;
 import davr.team.entity.User;
-import davr.team.repository.IUserRepository;
+import davr.team.dao.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

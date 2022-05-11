@@ -1,6 +1,9 @@
 package davr.team.controller;
 
 import davr.team.dto.LoginDto;
+import davr.team.dto.SignUpDto;
+import davr.team.dto.response.ApiResponse;
+import davr.team.service.SignUpService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +28,7 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
 
+    private final SignUpService signUpService;
 
     @PostMapping("/login")
     public ResponseEntity<String> authenticate(@RequestBody LoginDto loginDto){
@@ -33,6 +37,12 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return new ResponseEntity<>("The user successfully signed-in!", HttpStatus.OK);
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<?> registerUser(@RequestBody SignUpDto signUpDto){
+        ApiResponse apiResponse = signUpService.registerUser(signUpDto);
+        return ResponseEntity.status(apiResponse.isSuccess()?200:409).body(apiResponse);
     }
 
 
