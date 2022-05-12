@@ -31,6 +31,7 @@ public class EmployeeController {
         return ResponseEntity.ok(employee);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping("/get")
     public ResponseEntity<EmployeeResponse> getAllEmployees(
             @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
@@ -41,6 +42,7 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.getAllEmp(pageNo, pageSize, sortBy, sortDir));
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping("/get-one/{id}")
     public ResponseEntity<?> getById(@PathVariable long id){
         return ResponseEntity.ok(employeeService.getOne(id));
