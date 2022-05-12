@@ -1,4 +1,4 @@
-package davr.team.dto;
+package davr.team.dto.request;
 
 import lombok.Data;
 

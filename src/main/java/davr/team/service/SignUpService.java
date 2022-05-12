@@ -1,11 +1,12 @@
 package davr.team.service;
 
-import davr.team.dto.SignUpDto;
-import davr.team.dto.response.ApiResponse;
+import davr.team.dto.request.SignUpDto;
 import davr.team.entity.Role;
 import davr.team.entity.User;
-import davr.team.dao.IRoleRepository;
-import davr.team.dao.IUserRepository;
+import davr.team.exception.ResourceAlreadyExistedException;
+import davr.team.repository.RoleRepository;
+import davr.team.repository.UserRepository;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,35 +19,36 @@ import java.util.Collections;
  * Date : 5.11.2022
  * Project Name : kpi.it
  */
+@Builder
 @Service
-@RequiredArgsConstructor
 public class SignUpService {
 
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private final IUserRepository iUserRepository;
+    private final UserRepository userRepository;
 
-    private final IRoleRepository iRoleRepository;
+    private final RoleRepository roleRepository;
 
-    public ApiResponse registerUser(SignUpDto signUpDto){
-        if (iUserRepository.existsByUsername(signUpDto.getUsername())){
-            return new ApiResponse("This username is already existed!", false);
+    public SignUpDto registerUser(SignUpDto signUpDto) {
+        if (userRepository.existsByUsername(signUpDto.getUsername())) {
+            throw new ResourceAlreadyExistedException("This username is already existed!");
         }
-        if (iUserRepository.existsByEmail(signUpDto.getEmail())){
-            return new ApiResponse("This email is already existed!", false);
+        if (userRepository.existsByEmail(signUpDto.getEmail())) {
+            throw new ResourceAlreadyExistedException("This email is already existed!");
         }
 
-        User user = new User();
-        user.setName(signUpDto.getName());
-        user.setUsername(signUpDto.getUsername());
-        user.setEmail(signUpDto.getEmail());
-        user.setPassword(passwordEncoder.encode(signUpDto.getPassword()));
+        Role roles = roleRepository.findByName("ROLE_USER").get();
 
-        Role roles = iRoleRepository.findByName("ROLE_USER").get();
-        user.setRoles(Collections.singleton(roles));
-        iUserRepository.save(user);
-
-        return new ApiResponse("User successfully registered!", true);
+        return SignUpDto.toDto(
+                userRepository.save(User.builder()
+                        .name(signUpDto.getName())
+                        .username(signUpDto.getUsername())
+                        .email(signUpDto.getEmail())
+                        .password(passwordEncoder.encode(signUpDto.getPassword()))
+                        .roles(Collections.singleton(roles))
+                        .build()
+                )
+        );
     }
+
 }

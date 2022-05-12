@@ -2,7 +2,7 @@ package davr.team.security;
 
 import davr.team.entity.Role;
 import davr.team.entity.User;
-import davr.team.dao.IUserRepository;
+import davr.team.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,11 +24,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final IUserRepository iUserRepository;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
-        User user = iUserRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
+        User user = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
                 .orElseThrow(() ->
                             new UsernameNotFoundException("User not found with username or email: " + usernameOrEmail));
         return new  org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), mapToRoles(user.getRoles()));

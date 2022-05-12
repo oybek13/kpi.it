@@ -1,10 +1,9 @@
 package davr.team.service;
 
-import davr.team.dto.LoginDto;
+import davr.team.dto.request.LoginDto;
 import davr.team.dto.response.JwtAuthResponse;
 import davr.team.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
