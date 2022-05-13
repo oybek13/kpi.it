@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 /**
  * Created by Oybek Karimjanov
  * Date : 5.11.2022
@@ -23,12 +25,12 @@ public class AuthController {
     private final LoginService loginService;
 
     @PostMapping("/login")
-    public ResponseEntity<JwtAuthResponse> authenticate(@RequestBody LoginDto loginDto){
+    public ResponseEntity<JwtAuthResponse> authenticate(@Valid @RequestBody LoginDto loginDto){
         return ResponseEntity.ok(loginService.login(loginDto));
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody SignUpDto signUpDto){
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpDto signUpDto){
         return ResponseEntity.ok(signUpService.registerUser(signUpDto));
     }
 

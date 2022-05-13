@@ -26,7 +26,7 @@ public class EmployeeController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/create")
-    public ResponseEntity<?> createEmp(@RequestBody EmployeeDto employeeDto){
+    public ResponseEntity<?> createEmp(@Valid @RequestBody EmployeeDto employeeDto){
         EmployeeDto employee = employeeService.createEmployee(employeeDto);
         return ResponseEntity.ok(employee);
     }
@@ -50,7 +50,7 @@ public class EmployeeController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/edit/{id}")
-    public ResponseEntity<?> updateEmp(@PathVariable Long id, @RequestBody EmployeeDto employeeDto){
+    public ResponseEntity<?> updateEmp(@PathVariable Long id, @Valid @RequestBody EmployeeDto employeeDto){
         return ResponseEntity.ok(employeeService.editEmp(id, employeeDto));
     }
 

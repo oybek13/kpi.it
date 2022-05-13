@@ -6,6 +6,7 @@ package davr.team.enums;
  * Project Name : kpi.it
  */
 public enum Level {
+    INTERN,
     JUNIOR,
     MIDDLE,
     SENIOR
