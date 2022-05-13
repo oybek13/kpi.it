@@ -1,6 +1,5 @@
 package davr.team.service;
 
-import davr.team.dto.response.EmployeeResponse;
 import davr.team.exception.ResourceNotFoundException;
 import davr.team.exception.SuccessfulException;
 import davr.team.repository.EmployeeRepository;
@@ -9,14 +8,9 @@ import davr.team.entity.Employee;
 import davr.team.exception.ResourceAlreadyExistedException;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by Oybek Karimjanov
@@ -54,28 +48,8 @@ public class EmployeeService {
     }
 
 
-    public EmployeeResponse getAllEmp(int pageNo, int pageSize, String sortBy, String sortDir) {
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
-
-        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-        Page<Employee> employees = employeeRepository.findAll(pageable);
-        List<Employee> employeesContent = employees.getContent();
-
-        List<EmployeeDto> content = employeesContent
-                .stream()
-                .map(EmployeeDto::toDto)
-                .collect(Collectors.toList());
-
-        EmployeeResponse employeeResponse = new EmployeeResponse();
-        employeeResponse.setContent(content);
-        employeeResponse.setPageNo(employees.getNumber());
-        employeeResponse.setPageSize(employees.getSize());
-        employeeResponse.setTotalPages(employees.getTotalPages());
-        employeeResponse.setTotalElements(employees.getTotalElements());
-        employeeResponse.setLast(employees.isLast());
-
-        return employeeResponse;
+    public List<Employee> getAllEmp() {
+        return employeeRepository.findAll();
     }
 
 
