@@ -23,7 +23,7 @@ public class LoginService {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    public JwtAuthResponse login(LoginDto loginDto){
+    public JwtAuthResponse login(LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDto.getUsernameOrEmail(), loginDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -32,4 +32,5 @@ public class LoginService {
         String token = jwtTokenProvider.generateToken(authentication);
         return new JwtAuthResponse(token);
     }
+
 }
